@@ -143,6 +143,9 @@
 			document.getElementById("searchBtn").addEventListener('click', (event) => {
 				search();
 			});
+			document.getElementById("searchInteractiveText").addEventListener("input", function(event) {
+				interactiveSearch();
+			});
 		}
 		function search() {
 			//console.log("EEEEEEEEH!"+document.getElementById("searchText").value);
@@ -168,6 +171,15 @@
 				for (let i = 0; i < element.childNodes.length; i++) {
 					searchReplace(oldString, newString, element.childNodes[i]);
 				}
+			}
+		}
+		function interactiveSearch() {
+			searchValue = document.getElementById("searchInteractiveText").value;
+			if (searchValue === "") {
+				console.log("vide");
+			} else {
+				newStringReplace = '<span class="select">' + searchValue + "</span>";
+				searchReplace(searchValue, newStringReplace);
 			}
 		}
 
@@ -218,6 +230,9 @@
 	<div>
 		<input type="text" placeholder="Ex : clémentine du jardin" id="searchText">
 		<button id="searchBtn">Rechercher</button>
+	</div>
+	<div>
+		<input type="text" placeholder="Ex : interactiveSearch du jardin" id="searchInteractiveText">
 	</div>
 </body>
 
