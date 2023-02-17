@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="author" content="Second Noa">
+		<meta name="description" content="Site du TD1 de R410">
+		<meta name="keywords" content="TD, Web, R410">
+		<title>TD1 - Exercice 1</title>
+		<link href="assets/favicon.ico" rel="icon" type="image/x-icon" />
+		<link rel="stylesheet" type="text/css" href="css/td1.css" />
+		<script defer="defer" src="js/td1.js"></script>
+		<script>			
+			function defineHeading1() {
+				title = document.getElementById("title").textContent;
+				document.title = title;
+				console.log("AAAAAAAA"+title);
+			}		
+			function defineHeading2() {
+				title = document.querySelector("h2").textContent;
+				document.title = title;
+				console.log("AAAAAAAA"+title);
+			}
+			function defineHeading3() {
+				elements = document.getElementsByTagName("h2");
+				if (elements.length === 0) {
+					console.log("aucun h2");
+					document.title = "Second Noa";
+				} else {
+					document.title = elements[elements.length - 1].textContent;
+				}
+			}	
+			function defineHeading4() {
+				elements = document.getElementsByClassName("firstOrLast");
+				if (elements.length === 0) {
+					console.log("aucun element");
+					document.title = "Second Noa";
+				} else if (elements.length % 2 === 0) {
+					console.log("PAIRE");
+					document.title = elements[0].textContent;
+				} else {
+					console.log("IMPAIRE");
+					document.title = elements[elements.length - 1].textContent;
+				}
+			}
+			function swapInnerHTML() {
+				elements = document.getElementsByTagName("p");
+				if (elements.length === 0) {
+					console.log("aucun element");
+				} else {
+					P1Content = elements[0].innerHTML;
+					P2Content = elements[1].innerHTML;
+					elements[0].innerHTML = P2Content;
+					elements[1].innerHTML = P1Content;
+				}
+			}
+			function dateAlter() {
+				divDate = document.getElementById("update-date");
+				date = new Date(document.lastModified);
+				format = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+				dateFr = date.toLocaleDateString('fr-FR', format);
+				author = document.querySelector("meta[name='author']").getAttribute("content");
+				divDate.textContent = "Dernière modification : le "+dateFr+" par "+author;
+			}
+			function getNbDays() {
+				console.log("CLICK");
+				p = document.getElementById("Pcpt");
+				targetDate = new Date(`July 19, 2023 00:00:00`);
+				date = new Date();
+				diff = targetDate - date;
+				reste = Math.ceil(diff / (1000 * 60 * 60 * 24));
+				p.textContent = "il reste "+reste+" jours avant le 19 juillet 2023";
+			}
+			function updateClock1() {
+				clock = document.getElementById("clock");
+				setInterval(function () {
+					date = new Date();
+					clock.textContent = date.toLocaleTimeString();
+					updateGraphicClock();
+				}, 1000);
+			}
+			function updateClock2() {
+				clock = document.getElementById("clock");
+				setTimeout(function () {
+					date = new Date();
+					clock.textContent = date.toLocaleTimeString();
+					updateGraphicClock();
+					updateClock2();
+				}, 1000);
+			}
+			function updateGraphicClock() {
+				src = "./assets/images/";
+				clockText = document.getElementById("clock").textContent;
+				clockNb = 0;
+				clockList = document.getElementsByClassName("clockImg");
+				for (var i = 0; i < clockText.length; i++) {
+					switch (clockText[i]) {
+						case ":":
+							break;
+						default:
+							imageSrc = src+clockText[i]+".gif";
+							clockList[clockNb].src = imageSrc;
+							clockNb ++;
+							break;
+					}
+				}
+			}
+			function addListenerTextInput() {
+				textInput = document.getElementById("champ");
+				//console.log(textInput); ?null
+				textInput.addEventListener('input', (event) => {
+					//console.log("AAAA"+textInput.value);
+					//console.log(isNaN(textInput.value));
+					if(textInput.value === "") {
+						textInput.className = "white";
+					} else {
+						if(!isNaN(textInput.value)) {
+							textInput.className = "green";
+						} else {
+							textInput.className = "red";
+						}
+					}
+				});
+			}
+			function addListenerMenu() {
+				btnPlus = document.getElementById("plusImg");
+				menuContent = document.getElementById("menuContent");
+				btnPlus.addEventListener('click', (event) => {
+					actualClass = menuContent.className;
+					//console.log("OOOOOOOOOOH"+actualClass);
+					if(actualClass == "showMenu") {
+						menuContent.className = "";
+						btnPlus.src = "./assets/images/plus.gif";
+					} else {
+						menuContent.className = "showMenu";
+						btnPlus.src = "./assets/images/minus.gif";
+					}
+				});
+			}
+			function loadPageContent() {
+				//console.log(document.body.textContent);
+				textBody = document.body.textContent;	
+				document.getElementById("searchBtn").addEventListener('click', (event) => {
+					search();
+				});
+			}
+			function search() {
+				//console.log("EEEEEEEEH!"+document.getElementById("searchText").value);
+				searchValue = document.getElementById("searchText").value;
+				//TODO replace all <span class="select">value</span> by value
+				//TODO get all elements with value as text
+				//TODO replace them with <span class="select">value</span>
+			}
+		</script>
+	</head>
+	<body onload="onLoad();">
+		<h1 id="title" class="firstOrLast">1.1</h1>
+		<h2>2.1</h2>
+		<h2 class="firstOrLast">2.2</h2>
+		<h3 class="firstOrLast">3.1</h3>
+		<h3>3.2</h3>
+		<h3>3.3</h3>
+		<div>
+			<p>Je suis un <span>petit</span> chenapan.</p>
+		</div>
+		<div>
+			<p>Un <span>chat</span> n'est pas un chien hehe.</p>
+		</div>
+		<div id="update-date"></div>
+		<p id="Pcpt" onclick="getNbDays();">il reste xxx jours avant le 19 juillet 2023</p>
+		<div id="graphic-clock">
+			<p id="clock"></p>
+			<img src="./assets/images/0.gif" alt="clockImg1" class="clockImg">
+			<img src="./assets/images/0.gif" alt="clockImg2" class="clockImg">
+			<a>:</a>
+			<img src="./assets/images/0.gif" alt="clockImg3" class="clockImg">
+			<img src="./assets/images/0.gif" alt="clockImg4" class="clockImg">
+			<a>:</a>
+			<img src="./assets/images/0.gif" alt="clockImg5" class="clockImg">
+			<img src="./assets/images/0.gif" alt="clockImg6" class="clockImg">
+		</div>
+		<form>
+			<input id="champ" class="white" type="text" placeholder="Ah" required>
+		</form>
+		<aside>
+			<div id="menuTitleWrap">
+				<img src="./assets/images/plus.gif" id="plusImg" alt="+">
+			</div>
+			<div id="menuContentWrap">
+				<ul id="menuContent">
+					<li>AH</li>
+					<li>OH</li>
+					<li>EH</li>
+				</ul>
+			</div>
+		</aside>
+		<div>
+			<input type="text" placeholder="Ex : clémentine du jardin" id="searchText">
+			<button id="searchBtn">Rechercher</button>
+		</div>
+	</body>
+</html>
